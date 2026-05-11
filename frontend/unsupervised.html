@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unsupervised Learning — Cat Food Survey</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0}
+nav{background:#1a1a2e;padding:12px 28px;display:flex;align-items:center;gap:24px;border-bottom:1px solid #2a2a4a}
+nav .brand{font-weight:700;font-size:1.05em;color:#fff;margin-right:8px}
+nav a{color:#aaa;text-decoration:none;font-size:.9em;padding:4px 8px;border-radius:5px}
+nav a:hover,nav a.active{color:#fff;background:#2a2a4a}
+.container{max-width:1100px;margin:36px auto;padding:0 20px}
+h1{font-size:1.8em;margin-bottom:6px}
+.sub{color:#888;margin-bottom:28px}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px}
+.kpi{background:#1e1e2e;border:1px solid #3b82f6;border-radius:10px;padding:16px;text-align:center}
+.kpi .lbl{font-size:.78em;color:#888;margin-bottom:5px}
+.kpi .val{font-size:1.4em;font-weight:700;color:#60a5fa}
+.kpi .sub2{font-size:.72em;color:#666;margin-top:3px}
+.card{background:#1e1e2e;border:1px solid #2a2a4a;border-radius:10px;overflow:hidden;margin-bottom:20px}
+.card-header{background:#2a2a4a;padding:12px 18px;font-size:.9em;font-weight:600}
+.card-body{padding:18px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px}
+img.plot{width:100%;border-radius:8px;border:1px solid #2a2a4a}
+.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.persona{border-radius:10px;padding:20px}
+.persona-0{background:linear-gradient(135deg,#1e3a5f,#1d4ed8);border:1px solid #3b82f6}
+.persona-1{background:linear-gradient(135deg,#2d1b69,#6d28d9);border:1px solid #8b5cf6}
+.persona h3{font-size:.95em;margin-bottom:8px}
+.persona .stat{font-size:1.5em;font-weight:700;margin-bottom:8px}
+.persona ul{font-size:.82em;padding-left:16px;line-height:1.8;opacity:.9}
+.info-box{background:#1e3a5f;border-left:4px solid #3b82f6;padding:10px 14px;border-radius:6px;font-size:.85em;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:.83em}
+th{background:#2a2a4a;padding:8px 10px;text-align:left;color:#ccc}
+td{padding:7px 10px;border-bottom:1px solid #2a2a4a;color:#ddd}
+tr:hover td{background:#1a2a3a}
+.bar-wrap{display:flex;flex-direction:column;gap:5px}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:.8em}
+.bar-lbl{width:140px;text-align:right;color:#aaa;flex-shrink:0}
+.bar-outer{flex:1;background:#2a2a4a;border-radius:3px;height:16px}
+.bar-c0{background:#3b82f6;border-radius:3px;height:100%;display:flex;align-items:center;padding-left:5px;color:#fff;font-size:.75em}
+.bar-c1{background:#8b5cf6;border-radius:3px;height:100%;display:flex;align-items:center;padding-left:5px;color:#fff;font-size:.75em}
+.legend{display:flex;gap:16px;margin-bottom:10px;font-size:.82em}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+@media(max-width:700px){.kpi-grid,.two-col,.three-col,.persona-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">🐱 Silent Salesman</span>
+  <a href="/">🏠 Home</a>
+  <a href="/unsupervised.html" class="active">🔵 Unsupervised</a>
+  <a href="/supervised.html">🤖 Supervised</a>
+  <a href="/business_insight.html">💡 Business Insight</a>
+</nav>
+<div class="container">
+  <h1>🔵 Unsupervised Learning</h1>
+  <p class="sub">K-Means Clustering · PCA · Isolation Forest Anomaly Detection</p>
+
+  <!-- KPIs — Unsupervised only -->
+  <div class="kpi-grid">
+    <div class="kpi"><div class="lbl">🔵 Optimal Clusters</div><div class="val" id="kK">—</div><div class="sub2">Elbow + Silhouette</div></div>
+    <div class="kpi"><div class="lbl">📐 PCA Components</div><div class="val">2</div><div class="sub2">~65% variance</div></div>
+    <div class="kpi"><div class="lbl">⚠️ Anomalies</div><div class="val" id="kAnom">—</div><div class="sub2">Isolation Forest</div></div>
+    <div class="kpi"><div class="lbl">👥 Cluster 0</div><div class="val" id="kC0">—</div><div class="sub2" id="kC0name">—</div></div>
+    <div class="kpi"><div class="lbl">👥 Cluster 1</div><div class="val" id="kC1">—</div><div class="sub2" id="kC1name">—</div></div>
+  </div>
+
+  <!-- Personas (dynamic) -->
+  <div class="persona-grid" id="personaGrid"></div>
+
+  <!-- Charts -->
+  <div class="two-col">
+    <div class="card"><div class="card-header">📈 Elbow Method &amp; Silhouette</div><div class="card-body"><img class="plot" src="/plots/elbow_silhouette.png" alt="Elbow"><div class="info-box">K=2 ให้ Silhouette Score สูงสุด</div></div></div>
+    <div class="card"><div class="card-header">🌐 PCA Scatter Plot</div><div class="card-body"><img class="plot" src="/plots/pca_scatter.png" alt="PCA"><div class="info-box">PC1+PC2 อธิบาย variance ~65%</div></div></div>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="card-header">🕸️ Cluster Radar Chart</div><div class="card-body"><img class="plot" src="/plots/cluster_radar.png" alt="Radar"></div></div>
+    <div class="card"><div class="card-header">⚠️ Anomaly Detection</div><div class="card-body"><img class="plot" src="/plots/anomaly_detection.png" alt="Anomaly"><div class="info-box">8 คน (5.4%) ถูกตรวจพบเป็น Outlier</div></div></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">🔥 Correlation Heatmap</div>
+    <div class="card-body"><img class="plot" src="/plots/correlation_heatmap.png" alt="Heatmap"></div>
+  </div>
+
+  <!-- Cluster Profile Bar Chart -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">📊 Cluster Profile Comparison</div>
+    <div class="card-body">
+      <div class="legend">
+        <span><span class="dot" style="background:#3b82f6"></span>Cluster 0</span>
+        <span><span class="dot" style="background:#8b5cf6"></span>Cluster 1</span>
+      </div>
+      <div class="bar-wrap" id="clusterBars"></div>
+    </div>
+  </div>
+
+  <!-- Descriptive Stats Table -->
+  <div class="card">
+    <div class="card-header">📋 Descriptive Statistics</div>
+    <div class="card-body">
+      <table id="statsTable"><thead><tr><th>Feature</th><th>Mean</th><th>Std</th><th>Min</th><th>Median</th><th>Max</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<script>
+const PERSONA_NAMES = ['Value-Driven Seekers','Premium & Aesthetic Lovers'];
+const PERSONA_CHANNELS = ['Pet Shop, คลินิกสัตว์','Supermarket Hi-End, Online Official'];
+const PERSONA_MSGS = ['สุขภาพดี คุ้มค่า เชื่อถือได้','สิ่งที่ดีที่สุดสำหรับลูกรัก'];
+
+Promise.all([
+  fetch('/api/anomaly-summary').then(r=>r.json()),
+  fetch('/api/cluster-profile').then(r=>r.json()),
+  fetch('/api/persona').then(r=>r.json()),
+  fetch('/api/descriptive-stats').then(r=>r.json()),
+]).then(([anomaly, clusters, personas, stats])=>{
+  const a = anomaly[0];
+  const total = a.total_respondents;
+
+  // KPIs
+  document.getElementById('kK').textContent = clusters.length;
+  document.getElementById('kAnom').textContent = `${a.anomaly_count}/${total}`;
+  personas.forEach((p,i)=>{
+    const pct = (p.count/total*100).toFixed(1);
+    document.getElementById(`kC${i}`).textContent = `${p.count} คน`;
+    document.getElementById(`kC${i}name`).textContent = PERSONA_NAMES[i];
+  });
+
+  // Persona cards
+  const grid = document.getElementById('personaGrid');
+  personas.forEach((p,i)=>{
+    const pct = (p.count/total*100).toFixed(1);
+    grid.innerHTML+=`<div class="persona persona-${i}">
+      <h3>Cluster ${p.cluster} — ${PERSONA_NAMES[i]}</h3>
+      <div class="stat">${p.count} คน (${pct}%)</div>
+      <ul>
+        <li>opt3_buy mean = <strong>${(+p.opt3_buy_mean).toFixed(2)}</strong></li>
+        <li>packaging_matters = ${(+p.packaging_matters).toFixed(2)}</li>
+        <li>Channel: ${PERSONA_CHANNELS[i]}</li>
+        <li>Message: ${PERSONA_MSGS[i]}</li>
+      </ul>
+    </div>`;
+  });
+
+  // Cluster profile bars
+  const featureCols = Object.keys(clusters[0]).filter(k=>k!=='cluster');
+  const wrap = document.getElementById('clusterBars');
+  featureCols.forEach(f=>{
+    const vals = clusters.map(c=>(+c[f]));
+    wrap.innerHTML+=`<div class="bar-row">
+      <span class="bar-lbl">${f}</span>
+      <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+        ${vals.map((v,i)=>`<div class="bar-outer"><div class="bar-c${i}" style="width:${v/5*100}%">${v.toFixed(2)}</div></div>`).join('')}
+      </div></div>`;
+  });
+
+  // Descriptive stats table
+  const tbody = document.querySelector('#statsTable tbody');
+  stats.slice(0,15).forEach(row=>{
+    const keys = Object.keys(row);
+    tbody.innerHTML+=`<tr><td>${row[keys[0]]}</td><td>${(+row.mean).toFixed(2)}</td><td>${(+row.std).toFixed(2)}</td><td>${row.min}</td><td>${row.median}</td><td>${row.max}</td></tr>`;
+  });
+});
+</script>
+</body>
+</html>

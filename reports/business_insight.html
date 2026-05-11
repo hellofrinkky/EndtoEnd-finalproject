@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Insight – Cat Food Survey</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f2f6;color:#333}
+  nav{background:#1a1a2e;color:white;padding:12px 24px;display:flex;align-items:center;gap:24px}
+  nav a{color:#ccc;text-decoration:none;font-size:.9em}
+  nav a.active,nav a:hover{color:white}
+  nav .brand{font-weight:bold;font-size:1.1em;margin-right:16px}
+  .container{max-width:1100px;margin:32px auto;padding:0 16px}
+  h1{font-size:1.8em;margin-bottom:6px}
+  .subtitle{color:#666;margin-bottom:24px}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+  .card{background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+  .card .label{font-size:.82em;color:#888;margin-bottom:6px}
+  .card .value{font-size:1.5em;font-weight:bold;color:#1a1a2e}
+  .card .sub{font-size:.8em;color:#aaa;margin-top:4px}
+  .section{background:white;border-radius:10px;padding:24px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+  .section h2{font-size:1.15em;margin-bottom:16px;border-left:4px solid #f59e0b;padding-left:10px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  img.plot{width:100%;border-radius:8px;border:1px solid #eee}
+  table{width:100%;border-collapse:collapse;font-size:.88em}
+  th{background:#f8f9fa;padding:8px 12px;text-align:left;border-bottom:2px solid #dee2e6}
+  td{padding:8px 12px;border-bottom:1px solid #f0f0f0}
+  .badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78em;font-weight:600}
+  .badge-green{background:#dcfce7;color:#166534}
+  .badge-blue{background:#dbeafe;color:#1d4ed8}
+  .badge-purple{background:#ede9fe;color:#5b21b6}
+  .badge-orange{background:#ffedd5;color:#9a3412}
+  .info-box{background:#fffbeb;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:6px;font-size:.9em;margin-top:12px}
+  .success-box{background:#f0fdf4;border-left:4px solid #10b981;padding:12px 16px;border-radius:6px;font-size:.9em;margin-top:12px}
+  .segment-card{border-radius:10px;padding:20px;margin-bottom:0}
+  .seg-0{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe}
+  .seg-1{background:linear-gradient(135deg,#faf5ff,#ede9fe);border:1px solid #ddd6fe}
+  .seg-card-title{font-weight:700;font-size:1em;margin-bottom:8px}
+  .seg-card-title span{font-size:.8em;font-weight:400;color:#666;margin-left:8px}
+  .rec-list{list-style:none;padding:0;margin-top:8px}
+  .rec-list li{padding:5px 0;font-size:.88em;border-bottom:1px solid rgba(0,0,0,.06)}
+  .rec-list li:last-child{border-bottom:none}
+  .rec-list li::before{content:"→ ";color:#6366f1;font-weight:bold}
+  .driver-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+  .driver-item:last-child{border-bottom:none}
+  .driver-rank{background:#f59e0b;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:bold;flex-shrink:0}
+  .driver-bar{flex:1;background:#eee;border-radius:4px;height:18px}
+  .driver-fill{background:linear-gradient(90deg,#f59e0b,#ef4444);border-radius:4px;height:100%;display:flex;align-items:center;padding-left:6px;color:white;font-size:.75em}
+  .arch-box{background:#1a1a2e;color:white;border-radius:10px;padding:24px}
+  .arch-row{display:flex;align-items:center;gap:0;margin-bottom:8px;flex-wrap:wrap}
+  .arch-node{background:rgba(255,255,255,.12);border-radius:8px;padding:8px 14px;font-size:.82em;text-align:center;min-width:110px}
+  .arch-arrow{color:#f59e0b;font-size:1.2em;padding:0 6px}
+  .team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .team-card{background:#f8f9fa;border-radius:8px;padding:14px;text-align:center;border-top:3px solid #6366f1}
+  .team-card .role{font-size:.75em;color:#6366f1;font-weight:600;margin-bottom:4px}
+  .team-card .name{font-size:.88em;font-weight:600}
+  .team-card .resp{font-size:.75em;color:#888;margin-top:4px;line-height:1.4}
+  @media(max-width:700px){.metrics,.two-col,.three-col,.team-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">🐱 Cat Food Survey</span>
+  <a href="../frontend/index.html">🏠 Home</a>
+  <a href="unsupervised.html">🔵 Unsupervised</a>
+  <a href="supervised.html">🤖 Supervised</a>
+  <a href="business_insight.html" class="active">💡 Business Insight</a>
+</nav>
+
+<div class="container">
+  <h1>💡 Business Insight Dashboard</h1>
+  <p class="subtitle">Strategic Recommendations · Design Brief · System Architecture · Team Roles</p>
+
+  <!-- KPI -->
+  <div class="metrics">
+    <div class="card">
+      <div class="label">🥇 Winning Option</div>
+      <div class="value">Option 3</div>
+      <div class="sub">Buy Score 3.89/5.00</div>
+    </div>
+    <div class="card">
+      <div class="label">🎯 Target Segment</div>
+      <div class="value">Premium</div>
+      <div class="sub">Cluster 1 (47.3%)</div>
+    </div>
+    <div class="card">
+      <div class="label">🔑 #1 Key Driver</div>
+      <div class="value">ภาพแมว</div>
+      <div class="sub">packaging_13 (10.7%)</div>
+    </div>
+    <div class="card">
+      <div class="label">📈 Purchase Intent</div>
+      <div class="value">72.3%</div>
+      <div class="sub">ของผู้ตอบทั้งหมด</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary -->
+  <div class="section">
+    <h2>📌 Executive Summary</h2>
+    <p style="line-height:1.8;font-size:.95em">
+      จากการวิเคราะห์ข้อมูล Survey อาหารแมว 148 คน ด้วยเทคนิค Machine Learning พบว่า <strong>Option 3</strong> ได้รับคะแนน "อยากซื้อ" สูงสุด (3.89/5.00) และมีผู้ตอบถึง <strong>72.3%</strong> ที่มีแนวโน้มจะซื้อ
+      ตลาดแบ่งออกเป็น 2 กลุ่มหลัก: <strong>Value-Driven Seekers</strong> (52.7%) และ <strong>Premium &amp; Aesthetic Lovers</strong> (47.3%)
+      ปัจจัยที่ขับเคลื่อนการซื้อมากที่สุดคือ <strong>ภาพแมวบนบรรจุภัณฑ์</strong>, <strong>รางวัลการันตี</strong>, และ <strong>สัญลักษณ์แหล่งผลิต</strong>
+      แนะนำให้วาง Positioning ไปทาง <strong>Premium Segment</strong> เป็นหลัก
+    </p>
+  </div>
+
+  <!-- Key Drivers -->
+  <div class="section">
+    <h2>🔑 Key Purchase Drivers (จาก Feature Importance)</h2>
+    <div id="drivers"></div>
+    <div class="info-box">💡 3 ปัจจัยแรกล้วนเกี่ยวกับ <strong>บรรจุภัณฑ์</strong> — สะท้อนว่า "Packaging คือ Silent Salesman" ที่แท้จริง</div>
+  </div>
+
+  <!-- Segment Recommendations -->
+  <div class="section">
+    <h2>🎯 Strategic Recommendations per Segment</h2>
+    <div class="two-col">
+      <div class="segment-card seg-0">
+        <div class="seg-card-title">Cluster 0 — Value-Driven Seekers <span>78 คน (52.7%)</span></div>
+        <ul class="rec-list">
+          <li><strong>Message:</strong> "สุขภาพดี คุ้มค่า เชื่อถือได้"</li>
+          <li><strong>Channel:</strong> Pet Shop, คลินิกสัตว์</li>
+          <li><strong>Promotion:</strong> Volume Discount, แถมของเล่น</li>
+          <li><strong>Packaging:</strong> เน้นข้อมูลโภชนาการ, ไอคอนสุขภาพ</li>
+          <li><strong>Price:</strong> Medium Range (76% ของตลาด)</li>
+        </ul>
+      </div>
+      <div class="segment-card seg-1">
+        <div class="seg-card-title">Cluster 1 — Premium &amp; Aesthetic Lovers <span>70 คน (47.3%)</span></div>
+        <ul class="rec-list">
+          <li><strong>Message:</strong> "สิ่งที่ดีที่สุดสำหรับลูกรัก"</li>
+          <li><strong>Channel:</strong> Supermarket Hi-End, Online Official Store</li>
+          <li><strong>Promotion:</strong> Limited Edition, Gift Set</li>
+          <li><strong>Packaging:</strong> Matte finish, สีพรีเมียม, Badge รับรอง</li>
+          <li><strong>Price:</strong> Premium Range (ยินดีจ่ายแพงกว่า)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="success-box">✅ <strong>แนะนำ Primary Target:</strong> Cluster 1 (Premium) เพราะ opt3_buy mean สูงกว่า (4.16 vs 3.64) และ packaging_matters สูงกว่า (0.76 vs 0.59) — สอดคล้องกับ Key Drivers ที่พบ</div>
+  </div>
+
+  <!-- Design Brief -->
+  <div class="section">
+    <h2>🎨 Packaging Design Brief (Data-Driven)</h2>
+    <div class="two-col">
+      <div>
+        <table>
+          <tr><th>องค์ประกอบ</th><th>คำแนะนำ (จาก ML)</th></tr>
+          <tr><td>🐱 Hero Image</td><td>ภาพแมวจริง Eye-contact กับผู้ซื้อ (packaging_13 = #1 driver)</td></tr>
+          <tr><td>🏆 Trust Badge</td><td>"Vet Recommended" / รางวัลสากล (packaging_19 = #2 driver)</td></tr>
+          <tr><td>🌍 Origin Mark</td><td>ธงชาติ / "Imported from Japan" (packaging_17 = #3 driver)</td></tr>
+          <tr><td>✨ Premium Look</td><td>Matte finish, Deep Blue/Black + Gold foil (packaging_12)</td></tr>
+          <tr><td>🥩 Ingredient</td><td>ภาพวัตถุดิบจริง (ปลา, ไก่) มุมขวาล่าง</td></tr>
+          <tr><td>🔒 Resealable</td><td>Ziplock เพื่อรักษาความสด (food_taste_7 = top feature)</td></tr>
+        </table>
+      </div>
+      <div>
+        <img class="plot" src="packaging_mockup.png" alt="Packaging Mockup">
+        <div class="info-box" style="margin-top:8px">📐 Mockup ออกแบบตาม Data-Driven Insights จาก Random Forest Feature Importance</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option Buy Scores -->
+  <div class="section">
+    <h2>📊 Buy Score ทุก Option</h2>
+    <img class="plot" src="../output_plots/option_buy_scores.png" alt="Option Buy Scores">
+    <div class="success-box">🥇 Option 3 ชนะทุก Option ด้วยคะแนน 3.89/5.00 — ห่างจาก Option 2 (3.34) ถึง 0.55 คะแนน</div>
+  </div>
+
+  <!-- System Architecture -->
+  <div class="section">
+    <h2>🏗️ System Architecture</h2>
+    <div class="arch-box">
+      <p style="color:#f59e0b;font-size:.85em;margin-bottom:16px">End-to-End AI Marketing Analytics System</p>
+      <div class="arch-row">
+        <div class="arch-node">📄 Raw Data<br><small>CAT_FINAL.csv</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🔧 Data Prep<br><small>1_clean.py<br>2_target.py</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🔵 Unsupervised<br><small>3_eda_unsupervised.py<br>K-Means, PCA, IF</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🤖 Supervised<br><small>4_supervised.py<br>RF, LR, GB</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🗄️ SQLite DB<br><small>results.db</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">🌐 Flask API<br><small>app.py</small></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-node">📊 Dashboard<br><small>HTML Reports</small></div>
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:.8em">
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:10px">
+          <div style="color:#60a5fa;font-weight:600;margin-bottom:4px">Data Layer</div>
+          data/raw/ → data/processed/
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:10px">
+          <div style="color:#34d399;font-weight:600;margin-bottom:4px">ML Layer</div>
+          analysis/ + models/ → output_plots/
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:10px">
+          <div style="color:#f59e0b;font-weight:600;margin-bottom:4px">Presentation Layer</div>
+          backend/app.py → reports/*.html
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Roles -->
+  <div class="section">
+    <h2>👥 Team Structure &amp; Responsibilities</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="role">Business Analyst</div>
+        <div class="name">สมาชิก 1</div>
+        <div class="resp">Problem Statement · Business Requirements · Strategic Recommendations</div>
+      </div>
+      <div class="team-card">
+        <div class="role">Data Engineer</div>
+        <div class="name">สมาชิก 2</div>
+        <div class="resp">Data Cleaning · Feature Engineering · SQLite Integration</div>
+      </div>
+      <div class="team-card">
+        <div class="role">ML Engineer</div>
+        <div class="name">สมาชิก 3</div>
+        <div class="resp">Unsupervised + Supervised Models · Model Evaluation · Feature Importance</div>
+      </div>
+      <div class="team-card">
+        <div class="role">Backend Developer</div>
+        <div class="name">สมาชิก 4</div>
+        <div class="resp">Flask API · Database Queries · REST Endpoints</div>
+      </div>
+      <div class="team-card">
+        <div class="role">Frontend Developer</div>
+        <div class="name">สมาชิก 5</div>
+        <div class="resp">Dashboard Design · HTML/CSS/JS · Data Visualization</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const drivers = [
+  {name:'packaging_13 — ภาพแมวบนบรรจุภัณฑ์', val:10.74},
+  {name:'packaging_19 — รางวัลการันตี', val:7.41},
+  {name:'packaging_17 — สัญลักษณ์แหล่งผลิต', val:6.70},
+  {name:'packaging_12 — ดูพรีเมียม', val:6.23},
+  {name:'food_make_import_8 — วัตถุดิบนำเข้า', val:5.25},
+  {name:'age_ — อายุผู้ซื้อ', val:4.59},
+  {name:'food_taste_7 — รสชาติ', val:3.95},
+];
+const wrap = document.getElementById('drivers');
+drivers.forEach((d,i)=>{
+  wrap.innerHTML += `<div class="driver-item">
+    <div class="driver-rank">${i+1}</div>
+    <div style="flex:1">
+      <div style="font-size:.85em;margin-bottom:4px">${d.name}</div>
+      <div class="driver-bar"><div class="driver-fill" style="width:${d.val*6}%">${d.val}%</div></div>
+    </div>
+  </div>`;
+});
+</script>
+</body>
+</html>

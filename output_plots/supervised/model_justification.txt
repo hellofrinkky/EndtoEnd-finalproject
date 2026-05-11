@@ -1,0 +1,19 @@
+
+🏆 Best Model: Random Forest
+
+เหตุผลที่เลือก:
+  - F1 Score สูงสุด = 0.816
+    (F1 เหมาะกับ binary classification ที่ data อาจ imbalanced)
+  - AUC-ROC = 0.682
+    (ยิ่งใกล้ 1 ยิ่งดี — สะท้อนความสามารถแยก class ได้จริง)
+  - CV F1 = 0.799 ± 0.030
+    (cross-validation ยืนยันว่าไม่ overfit)
+
+ข้อจำกัด:
+  - Dataset มีเพียง 148 rows — ผลอาจมี variance สูง
+  - แนะนำ collect data เพิ่มในอนาคตเพื่อ model ที่ robust กว่านี้
+
+Top 3 features ที่ส่งผลต่อการซื้อ Option 3 มากที่สุด:
+  1. packaging_13 (importance=0.1074)
+  2. packaging_19 (importance=0.0741)
+  3. packaging_17 (importance=0.0670)

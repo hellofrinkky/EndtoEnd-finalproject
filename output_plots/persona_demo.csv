@@ -1,0 +1,3 @@
+cluster,count,gender_mode,age_mean,status_mode,cat_meaning,packaging_matters,opt3_buy_mean
+0,78,2,2.14,4,2.68,0.59,3.64
+1,70,2,1.99,3,2.71,0.76,4.16

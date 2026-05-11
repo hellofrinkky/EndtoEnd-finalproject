@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cat Food Survey — Home</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
+nav{background:#1a1a2e;padding:12px 28px;display:flex;align-items:center;gap:24px;border-bottom:1px solid #2a2a4a}
+nav .brand{font-weight:700;font-size:1.05em;color:#fff;margin-right:8px}
+nav a{color:#aaa;text-decoration:none;font-size:.9em;padding:4px 8px;border-radius:5px}
+nav a:hover,nav a.active{color:#fff;background:#2a2a4a}
+.container{max-width:1100px;margin:36px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:6px}
+.sub{color:#888;margin-bottom:28px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.kpi{background:#1e1e2e;border:1px solid #2a2a4a;border-radius:10px;padding:20px;text-align:center}
+.kpi .lbl{font-size:.8em;color:#888;margin-bottom:6px}
+.kpi .val{font-size:1.8em;font-weight:700;color:#fff}
+.kpi .sub2{font-size:.75em;color:#666;margin-top:4px}
+.nav-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.nav-card{background:#1e1e2e;border:1px solid #2a2a4a;border-radius:10px;padding:22px}
+.nav-card h3{font-size:1em;margin-bottom:6px}
+.nav-card p{font-size:.82em;color:#888;margin-bottom:14px}
+.btn{display:inline-block;padding:7px 18px;border-radius:6px;font-size:.85em;text-decoration:none;font-weight:600}
+.btn-blue{background:#3b82f6;color:#fff}
+.btn-green{background:#10b981;color:#fff}
+.btn-yellow{background:#f59e0b;color:#000}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#1e1e2e;border:1px solid #2a2a4a;border-radius:10px;overflow:hidden}
+.card-header{background:#2a2a4a;padding:12px 18px;font-size:.9em;font-weight:600}
+.card-body{padding:16px}
+.list-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #2a2a4a;font-size:.88em}
+.list-item:last-child{border-bottom:none}
+.badge{background:#3b82f6;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.75em;flex-shrink:0}
+.role-item{padding:9px 0;border-bottom:1px solid #2a2a4a;font-size:.88em}
+.role-item:last-child{border-bottom:none}
+.role-item strong{display:block;color:#fff}
+.role-item span{color:#888;font-size:.85em}
+@media(max-width:700px){.kpi-grid,.nav-cards,.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">🐱 Silent Salesman</span>
+  <a href="/" class="active">🏠 Home</a>
+  <a href="/unsupervised.html">🔵 Unsupervised</a>
+  <a href="/supervised.html">🤖 Supervised</a>
+  <a href="/business_insight.html">💡 Business Insight</a>
+</nav>
+<div class="container">
+  <h1>🐱 Cat Food Market Analysis</h1>
+  <p class="sub">Project Silent Salesman — AI-Driven Marketing Analytics System</p>
+
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi"><div class="lbl">👥 Respondents</div><div class="val" id="kTot">—</div><div class="sub2">Survey participants</div></div>
+    <div class="kpi"><div class="lbl">🔵 Clusters</div><div class="val" id="kCluster">—</div><div class="sub2">K-Means optimal K</div></div>
+    <div class="kpi"><div class="lbl">⚠️ Anomalies</div><div class="val" id="kAnomaly">—</div><div class="sub2">Isolation Forest</div></div>
+    <div class="kpi"><div class="lbl">🏆 Best F1</div><div class="val" id="kF1">—</div><div class="sub2">Random Forest</div></div>
+  </div>
+
+  <div class="nav-cards">
+    <div class="nav-card">
+      <h3>🔵 Unsupervised Learning</h3>
+      <p>K-Means · PCA · Anomaly Detection</p>
+      <a href="/unsupervised.html" class="btn btn-blue">Open →</a>
+    </div>
+    <div class="nav-card">
+      <h3>🤖 Supervised Learning</h3>
+      <p>Random Forest · Feature Importance · ROC</p>
+      <a href="/supervised.html" class="btn btn-green">Open →</a>
+    </div>
+    <div class="nav-card">
+      <h3>💡 Business Insight</h3>
+      <p>Segment Strategy · Design Brief</p>
+      <a href="/business_insight.html" class="btn btn-yellow">Open →</a>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">🔄 ML Pipeline</div>
+      <div class="card-body">
+        <div class="list-item"><div class="badge">1</div><div><strong>1_clean.py</strong><br><span style="color:#888;font-size:.85em">Data Cleaning &amp; Encoding</span></div></div>
+        <div class="list-item"><div class="badge">2</div><div><strong>2_target.py</strong><br><span style="color:#888;font-size:.85em">Target Variable Engineering</span></div></div>
+        <div class="list-item"><div class="badge">3</div><div><strong>3_eda_unsupervised.py</strong><br><span style="color:#888;font-size:.85em">EDA + K-Means + PCA + Anomaly</span></div></div>
+        <div class="list-item"><div class="badge">4</div><div><strong>4_supervised.py</strong><br><span style="color:#888;font-size:.85em">Classification Models</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">👥 Team Structure</div>
+      <div class="card-body">
+        <div class="role-item"><strong>Business Analyst</strong><span>วิเคราะห์ปัญหาธุรกิจ · Problem Statement</span></div>
+        <div class="role-item"><strong>Data Engineer</strong><span>Data Cleaning · Feature Engineering · SQLite</span></div>
+        <div class="role-item"><strong>ML Engineer</strong><span>Unsupervised + Supervised Models · Evaluation</span></div>
+        <div class="role-item"><strong>Backend Developer</strong><span>Flask API · Database Queries</span></div>
+        <div class="role-item"><strong>Frontend Developer</strong><span>Dashboard · Data Visualization</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+Promise.all([
+  fetch('/api/anomaly-summary').then(r=>r.json()),
+  fetch('/api/cluster-profile').then(r=>r.json()),
+  fetch('/api/model-comparison').then(r=>r.json()),
+]).then(([anomaly, clusters, models])=>{
+  const a = anomaly[0];
+  document.getElementById('kTot').textContent = a.total_respondents;
+  document.getElementById('kCluster').textContent = clusters.length;
+  document.getElementById('kAnomaly').textContent = `${a.anomaly_count} (${a.anomaly_pct}%)`;
+  const best = models.reduce((a,b)=> b.F1 > a.F1 ? b : a);
+  document.getElementById('kF1').textContent = best.F1.toFixed(3);
+});
+</script>
+</body>
+</html>
