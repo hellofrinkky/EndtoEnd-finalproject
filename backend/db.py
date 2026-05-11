@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 BASE = Path(__file__).parent.parent
-DB_PATH = Path(__file__).parent / "analytics.db"
+DB_PATH = Path("/tmp/analytics.db")
 
 CSV_MAP = {
     "cluster_results":   BASE / "output_plots" / "cluster_profile.csv",
