@@ -15,6 +15,7 @@ CSV_MAP = {
 
 
 def init_db():
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     for table, csv_path in CSV_MAP.items():
         df = pd.read_csv(csv_path)
